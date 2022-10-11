@@ -6,7 +6,7 @@
 
 ## Preprint DOI: https://www.biorxiv.org/content/10.1101/2021.11.29.470363v2
 
-# Citation: Sutton, L.J., Ibañez, J.C., Salvador, D.I., Taraya, R.L., Opiso, G.S., Senarillos, T.L.P. & McClure, C.J.W. (2022). 
+# Citation: Sutton, L.J., IbaÃ±ez, J.C., Salvador, D.I., Taraya, R.L., Opiso, G.S., Senarillos, T.L.P. & McClure, C.J.W. (2022). 
 # Priority conservation areas and a global population estimate for the Critically Endangered Philippine Eagle derived from modelled range metrics using remote sensing habitat characteristics. 
 # bioRxiv. DOI: https://doi.org/10.1101/2021.11.29.470363 [preprint]
 
@@ -207,24 +207,6 @@ plot(x=mn,
 
 par(mfrow=c(1,1))
 
-# plot response curves
-tiff("./figures/Figure_1.tif",
-     width=250,
-     height=150,
-     units="mm",
-     res=600,
-     pointsize=12)
-
-plot(x=mn,
-     common.scale=TRUE,
-     type="cloglog",
-     ylab="Predicted value",
-     mod=mn)
-
-dev.off()
-
-par(mfrow=c(1,1))
-
 # plot coefficient paths
 plot.glmnet(x = mn, xvar = "norm", label = TRUE)
 plot.glmnet(x = mn, xvar = "lambda", label = TRUE)
@@ -274,74 +256,7 @@ points(locs$lon,
        bg="black",
        cex=0.6) 
 
-# plot figure
-tiff("./figures/Figure_2.tif",
-     width=225,
-     height=200,
-     units="mm",
-     res=600,
-     pointsize=12)
-
-plot(ext,
-     xlab="Longitude",
-     ylab="Latitude", las = 1,
-     axes=T,
-     col= "lightgrey", 
-     border = "grey50")
-
-plot(x=pred.mn, 
-     add=T,
-     maxpixels=500000,
-     col=alpha(pal, 0.8),
-     #xlab="Longitude",
-     #ylab="Latitude", las = 1,
-     bty="n",
-     box=F,
-     axes=F,
-     zlim=c(0.0,1.0), 
-     legend=F)
-
-plot(ext, add=T, border = "grey50")
-
-addRasterLegend(r=pred.mn, 
-                direction="vertical",
-                side=2,
-                location=c(127,127.1, 6.5,9),
-                nTicks=4,
-                shortFrac = 0.02, 
-                longFrac = 0.3, 
-                axisOffset = 0, 
-                border = TRUE,
-                ramp=pal,
-                isInteger = 'auto', 
-                ncolors = 100, 
-                breaks = NULL,
-                minmax = NULL, 
-                locs = NULL, 
-                cex.axis = 0.75, 
-                labelDist = 0.7, 
-                digits=1)
-
-addnortharrow(pos = "topleft", 
-              scale = 0.5, 
-              lwd = 1, 
-              border = "black", 
-              text.col = "black")
-
-map.scale(x=122, 
-          y=9.75, 
-          ratio=TRUE, 
-          relwidth=0.10, 
-          cex=0.4)
-
-points(locs$lon, 
-       locs$lat, 
-       pch=21, 
-       col="black",
-       cex=0.25)
-
-dev.off()
-
+# Model Evaluation
 
 # partial ROC
 library(ENMGadgets)
@@ -663,64 +578,6 @@ plot(c, col=pal)
 
 writeRaster(c, "./results/PHEA_Continuous.tif", overwrite=TRUE)
 
-# plot figure
-tiff("./figures/Figure_3.tif",
-     width=200,
-     height=250,
-     units="mm",
-     res=600,
-     pointsize=12)
-
-plot(shp, 
-     axes=T,
-     xlab="Longitude", 
-     ylab="Latitude", las=1,
-     col = "lightgrey",
-     border="grey70", 
-     lwd=.8)
-
-plot(c,
-     axes=F,
-     add=T,
-     col=alpha(pal, 0.8),
-     zlim=c(0.0, 1.0), 
-     legend=F,
-     bty="n",
-     box=F)
-
-addRasterLegend(r=c, 
-                direction="vertical",
-                side=2,
-                location=c(128.3,128.7, 8,16),
-                nTicks=4,
-                shortFrac = 0.02, 
-                longFrac = 0.3, 
-                axisOffset = 0, 
-                border = TRUE,
-                ramp=pal,
-                isInteger = 'auto', 
-                ncolors = 100, 
-                breaks = NULL,
-                minmax = NULL, 
-                locs = NULL, 
-                cex.axis = 0.75, 
-                labelDist = 0.7, 
-                digits=1)
-
-addnortharrow(pos = "topright", 
-              scale = 0.5, 
-              lwd = 1, 
-              border = "black", 
-              text.col = "black")
-
-map.scale(x=125, 
-          y=21, 
-          ratio=TRUE, 
-          relwidth=0.10, 
-          cex=0.4)
-
-dev.off()
-
 ## Binary threshold
 
 # evaluation statistics
@@ -875,60 +732,6 @@ writeOGR(obj=int,
 # load range extent
 ext2 <- readOGR(dsn="C:/PHEA-SDM/data/GADM", layer="PHEA_extent")
 ext2
-
-
-# plot figure
-tiff("./figures/Figure_4.tif",
-     width=200,
-     height=250,
-     units="mm",
-     res=600,
-     pointsize=12)
-
-plot(shp, 
-     axes=T,
-     xlab="Longitude", 
-     ylab="Latitude", las=1,
-     #col="grey70",
-     border= "grey50")
-
-plot(int, 
-     add = T, 
-     col = "khaki", 
-     border = "grey60")
-
-plot(ext2, 
-     add=T, 
-     border= "grey50", 
-     col = "lightgrey")
-
-plot(aoh, 
-     #xlab="Longitude", 
-     #ylab="Latitude", las=1,
-     add=T,
-     axes=F,
-     col= "darkkhaki",
-     border = "darkkhaki",
-     bty="n",
-     box=F,
-     main = "")
-
-plot(ch, add=T, lwd = 1.5, lty = 4, border = "steelblue")
-
-addnortharrow(pos = "topright", 
-              scale = 0.5, 
-              lwd = 1, 
-              border = "black", 
-              text.col = "black")
-
-map.scale(x=125, 
-          y=21, 
-          ratio=TRUE, 
-          relwidth=0.10, 
-          cex=0.4)
-
-dev.off()
-
 
 # project to Transverse cylindrical equal area
 crs.proj <- "+proj=tcea +lon_0=122.2558465 +datum=WGS84 +units=m +no_defs"
