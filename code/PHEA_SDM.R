@@ -184,9 +184,11 @@ mn$call
 names(mn)
 str(mn)
 summary(mn)
+
 mn$alpha
 mn$entropy
 
+# extract beta coefficients
 round(mn$betas,3)
 write.csv(round(mn$betas,3), "./results/beta-coefficients.csv")
 
@@ -403,16 +405,10 @@ for (i in 1:5) {
     dv[kPres!=i, predictors],
     bg2[kBg!=i, predictors]
   )
-  head(envData)
   
-  presBg <- c(rep(1, sum(kPres!=i)), 
-              rep(0, sum(kBg!=i)))
-  head(presBg)
-  
+  presBg <- c(rep(1, sum(kPres!=i)), rep(0, sum(kBg!=i))
   
   trainData <- cbind(presBg, envData)
-  head(trainData)
-  tail(trainData)
   
   # check for NA values
   row.has.na <- apply(trainData, 1, function(x){any(is.na(x))})
@@ -578,7 +574,7 @@ plot(c, col=pal)
 
 writeRaster(c, "./results/PHEA_Continuous.tif", overwrite=TRUE)
 
-## Binary threshold
+## Reclassify continuous map to binary threshold
 
 # evaluation statistics
 eval <- dismo::evaluate(p=as.vector(predPres), 
@@ -744,7 +740,7 @@ aoh.area               # km2 for each polygon
 round(sum(aoh.area),0) # total km2
 
 
-# Territorial area km2 based on median Home Range Estimates
+# Territorial area in km2 based on median Home Range Estimates
 med <- 73  # 95% KDE
 min <- 64  # r-LoCoH
 max <- 90  # 99% MCP
