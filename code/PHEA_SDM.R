@@ -29,7 +29,6 @@ library(maxnet)
 library(ENMeval)
 library(enmSdm)
 library(dismo) 
-library(ENMTools) 
 library(ENMGadgets) 
 
 library(prettymapr) 
@@ -108,10 +107,10 @@ points(locs$lon,
 evalb <- ENMevaluate(occ=locs, 
                      env=env, 
                      RMvalues=seq(1, 10, 0.5), # grid search to 10
-                     fc=c("L", "LQ"),
+                     fc=c("L", "LQ"),          # linear and quadratic functions
                      algorithm="maxnet",
                      method='block',
-                     n.bg=1000,                # 1:10 ratio
+                     n.bg=1000,                # 1:10 ratio presences:background points
                      rasterPreds=TRUE,
                      clamp=TRUE, 
                      parallel = TRUE, 
@@ -177,8 +176,8 @@ mn <- maxnet(p = sdmdata$presabs,
              data = env.data,
              f = maxnet.formula(p = sdmdata$presabs, 
                                 data = env.data, 
-                                classes = "lq"),
-             regmult = 3)
+                                classes = "lq"), # feature classes or functions
+             regmult = 3) # level of coefficient penalty
 
 mn$call
 names(mn)
@@ -200,7 +199,7 @@ mn <- readRDS('./results/maxnet.RData')
 summary(mn)
 round(mn$betas,3)
 
-# response curves
+# covariate response curves
 plot(x=mn,
      common.scale=TRUE,
      type="cloglog",
@@ -228,7 +227,7 @@ writeRaster(pred.mn,
             "./results/Mindanao_Continuous.tif", 
             overwrite=TRUE)
 
-# re-load raster
+# re-load raster if needed
 pred.mn <- raster("./results/Mindanao_Continuous.tif")
 pred.mn
 
@@ -590,10 +589,12 @@ threshold(eval)
 maxSeSp <- eval@t[which.max(eval@TPR + eval@TNR)]
 maxSeSp
 
+# define matrix
 maxt <- c(0,0.490, 0,0.490, 1, 1)
 rclmat <- matrix(maxt, ncol=3, byrow=TRUE)
 rclmat
 
+# reclassify continuous to binary
 rc <- reclassify(c, rclmat)
 rc
 
@@ -675,7 +676,7 @@ writeOGR(obj=aoh,
          overwrite_layer=T,
          driver="ESRI Shapefile")
 
-# load new shapefile
+# load new shapefile if needed
 aoh <- readOGR(dsn="C:/PHEA-SDM/results", layer="PHEA_AOH")
 summary(aoh)
 
