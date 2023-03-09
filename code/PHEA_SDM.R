@@ -4,11 +4,8 @@
 ## lsutton@peregrinefund.org
 ## 30-09-2022
 
-## Preprint DOI: https://www.biorxiv.org/content/10.1101/2021.11.29.470363v2
-
-# Citation: Sutton, L.J., Ibañez, J.C., Salvador, D.I., Taraya, R.L., Opiso, G.S., Senarillos, T.L.P. & McClure, C.J.W. (2022). 
-# Priority conservation areas and a global population estimate for the Critically Endangered Philippine Eagle derived from modelled range metrics using remote sensing habitat characteristics. 
-# bioRxiv. DOI: https://doi.org/10.1101/2021.11.29.470363 [preprint]
+# Citation: Sutton, L.J., Ibañez, J.C., Salvador, D.I., Taraya, R.L., Opiso, G.S., Senarillos, T.L.P. & McClure, C.J.W. (2023). 
+# Priority conservation areas and a global population estimate for the Critically Endangered Philippine Eagle. Animal Conservation. DOI: https://doi.org/10.1111/acv.12854
 
 
 ## R packages not on CRAN
