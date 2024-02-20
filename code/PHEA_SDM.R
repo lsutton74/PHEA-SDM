@@ -112,13 +112,16 @@ evalb <- ENMevaluate(occ=locs,
                      clamp=TRUE, 
                      parallel = TRUE, 
                      numCores = 4)
+
 evalb
 aicmods <- which(evalb@results$AICc == min(na.omit(evalb@results$AICc)))
 evalb@results[aicmods,]
 evalb@results
+
+# write csv file
 write.csv(evalb@results, "./results/block.csv")
 
-# fit penalized logistic regression model
+# fit penalized logistic regression model with elastic net penalty
 library(glmnet)
 library(maxnet)
 library(enmSdm)
@@ -176,6 +179,7 @@ mn <- maxnet(p = sdmdata$presabs,
                                 classes = "lq"), # feature classes or functions
              regmult = 3) # level of coefficient penalty
 
+# check model
 mn$call
 names(mn)
 str(mn)
@@ -225,8 +229,8 @@ writeRaster(pred.mn,
             overwrite=TRUE)
 
 # re-load raster if needed
-pred.mn <- raster("./results/Mindanao_Continuous.tif")
-pred.mn
+#pred.mn <- raster("./results/Mindanao_Continuous.tif")
+#pred.mn
 
 # colour ramp palette
 MetBrewer::colorblind_palettes
@@ -354,7 +358,7 @@ kBg <- kfold(x = bg2, k=5)
 head(kPres)
 head(kBg)
 
-# map
+# plot map
 plot(ext, main='K-fold #1')
 
 points(bg2$x,#[kBg==1],
@@ -677,7 +681,7 @@ writeOGR(obj=aoh,
 aoh <- readOGR(dsn="C:/PHEA-SDM/results", layer="PHEA_AOH")
 summary(aoh)
 
-crs(aoh)  
+# set CRS              
 crs(aoh) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
 crs(aoh)
 
@@ -697,7 +701,7 @@ plot(aoh,
      box=F,
      main = "")
 
-# plot MCP for max EOO
+# plot MCP for maximum EOO
 ch <- gConvexHull(aoh)
 ch
 plot(ch, add=T, lty=3)
@@ -768,7 +772,7 @@ round(sum(int.area),0) # total km2
 
 ## GAP ANALYSIS
 
-# set WDPA target representation based on AOH
+# formula for WDPA target representation based on AOH
 t <- max(0.1, min(1, -0.375*log10(sum(aoh.area))+2.126))
 round(t,2)
 
